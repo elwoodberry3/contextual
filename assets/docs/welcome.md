@@ -1,0 +1,63 @@
+# Welcome
+
+## Why Contextual?
+
+Contextual dramatically simplifies the development, deployment, operations, and scaling of AI-enabled services that power your business applications, automation, tasks, integrations, and processes.
+
+* Contextual’s fully integrated tech stack eliminates timely setup and configuration
+* Contextual’s low-code flow editor, AI-driven data schemas, and instant API reduce unnecessary coding.
+* Contextual’s automatic deployment and instant scaling decrease operational complexity and burden.
+
+<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td></td><td><strong>Components</strong></td><td>Discover the building blocks of Contextual.</td><td><a href="/pages/lyFT5cal3W1mZmRmSUx1">/pages/lyFT5cal3W1mZmRmSUx1</a></td><td><a href="/files/qSw5gTvpHlkNilkutjZ7">/files/qSw5gTvpHlkNilkutjZ7</a></td></tr><tr><td></td><td><strong>Basic Training</strong></td><td>Learn key concepts to help you start creating quickly.</td><td><a href="/pages/8oSPJHyJxUCSZRzoC1re">/pages/8oSPJHyJxUCSZRzoC1re</a></td><td><a href="/files/PGZg2DwoYnLjtRv7tjeW">/files/PGZg2DwoYnLjtRv7tjeW</a></td></tr></tbody></table>
+
+## What is Contextual Good For?
+
+Contextual is ideal for AI-enhanced services that require asynchronous event processing, the ability to execute discrete business logic on every event as it flows through the system, and the ability to scale from zero to high transaction volumes in real-time.
+
+Organizations with distributed field service operations, real-time client data exchange or system integrations, high-transaction volume sales, purchasing or support teams, connected IOT devices, or cross-functional / cross-system workflow management requirements benefit from Contextual’s ability to enable fast, cost effective and scalable microservices for:
+
+* Event Transformation, Enhancement and Triggering - Taking a raw transaction or event and modifying it to the format required for a downstream system, enhancing the data for presentation to an end user, or applying rule-based business logic that triggers follow-on action.
+* AI Analysis and Processing - Passing individual events into an LLM assistant to interpret and summarize natural language, categorize requests, prioritize incidents or identify variance.
+* Data Collection and Organization - Regularly polling or receiving data from disparate internal or third party systems and applying rules or logic to consolidate that data into actionable records for subsequent processing.
+* Validation and Verification - Comparing an individual transaction or group of transactions against an established pattern, rule-set, delivery obligation or expected result to ensure service, contract or financial compliance.
+
+## Example Contextual Microservices
+
+For instance, standardizing timezones, applying consistent categorization rules, localizing language or transforming measurements.
+
+## How does Contextual simplify development, deployment, operations and scaling of those backend microservices?
+
+Contextual dramatically reduces time to value for backend microservices by eliminating timely setup and configuration, reducing unnecessary coding and decreasing operational complexity and burden. We achieve this by delivering:
+
+### World Class, Fully Integrated Tech Stack for Asynchronous Apps
+
+Contextual has customized, augmented and combined a suite of state-of-the-art open-source technologies in order to create a fully-managed, tightly integrated technology stack. The Contextual solution combines critical functions for data definition and management, asynchronous message handling, secure API access, low-code business logic development and zero complexity deployment. All of this is deployed with just a click, enabling developers to begin working on business value immediately.
+
+### AI-Driven, Low-Code Application Development
+
+Contextual’s development tools are linked with OpenAIs API to simplify critical development functions including data record schema design and NodeRED-based business functionality. With simple AI prompts, developers can create, modify and deploy.
+
+* One-Click Microservice Service Deployment
+* Customizable, Agent-Based Compute Scaling
+
+### Quick System Flyover
+
+* **Home** - A quick summary of your tenant.
+* **Services** - Packaged bundles of Contextual components.
+  * My Services for when you are ready to create your own service and move functionality between tenants in Contextual
+* **Components** - The building blocks and operation of your solution on Contextual are defined here.
+  * [Object Types](/documentation-and-resources/components-and-data/object-types.md) for data definition and management
+  * [Flows](/documentation-and-resources/components-and-data/flows.md) for logic, workflows, automations, and programming when you need it
+  * [Agents](/documentation-and-resources/components-and-data/agents.md) for Compute, Memory, On-Demand scaling and operation of your solution
+  * [Connections](/documentation-and-resources/components-and-data/connections.md) to centrally define integrations with other systems
+  * [JWKS Profiles](/documentation-and-resources/components-and-data/jwks-profiles.md) to secure key parts of your solution as needed
+* **Records** - Search, sort, filter, create, and otherwise manage Records of your Object Types
+* **Logs** - see Session and Message details for all of your operating Agents
+  * All Logs lets you pick one, some, or all of your Agents to view their logs in one, central location.
+  * Live View lets you pick Agents and view a live stream of up to 500 of your most recent Log Sessions or Log Messages from operating Agents in your tenant
+* **Security** - Control and manage access to your tenant.
+  * Users - invite and manage users and their roles in the tenant
+  * Roles - define roles and the permissions associated with them for your tenant
+* [**Tenant API**](/documentation-and-resources/tenants/what-is-the-tenant-api.md) - Control and manage access to your tenant using the turnkey, automatic API for your Object Types and data
+  * [API Keys](/documentation-and-resources/tenants/what-is-the-tenant-api/api-keys.md) - create and manage API Keys for your Tenant API
+  * [Documentation](/documentation-and-resources/tenants/what-is-the-tenant-api/documentation.md) - access automatically-generated Swagger docs for your Tenant API
