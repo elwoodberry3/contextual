@@ -1,7 +1,7 @@
 ![Hero](../../imgs/pg-header.jpg)  
 # Corporate Documentation  
 
-## [Getting Started](../../../../contextual/assets/docs/corp/01.getting.started/)
+## [Getting Started](/contextual/assets/docs/corp/01.getting.started/)
 1. [Welcome](../../docs/corp/01.getting.started/01.welcome.md)
 
 ## [Training](../../../../contextual/assets/docs/corp/02.training/)
