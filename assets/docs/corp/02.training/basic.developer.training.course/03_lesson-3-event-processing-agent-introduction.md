@@ -1,45 +1,46 @@
-# Lesson 1: HTTP Agent Introduction
+# Lesson 3: Event Processing Agent Introduction
 
-Create a Web Form to Record Weather Data
+## Temperature Event Monitoring Agent
 
-{% embed url="<https://www.loom.com/share/c23c9f3c4ed9446faa18815e7b30c5cc?sid=91ac4ffc-2977-4b93-a84d-86cf1ec0415b>" %}
+{% embed url="<https://www.loom.com/share/d84cd21e08d149a7bfbb71ee4f589cfa?sid=9e308241-c0d0-4de8-bead-d5389a248522>" %}
 
 ### Overview
 
-**Objective:** Set up a simple HTTP flow that serves a web form for inputting weather data (temperature, humidity, wind speed, etc.).
+**Objective**: Build an event-processing agent that receives the incoming temperature events and monitors temperature data for anomalies.
 
-**Description:** This project introduces basic HTTP flows and interaction with Native Objects by allowing users to manually input weather data into the system. The flow will store this data as Native Objects in your system.
+**Description**:
 
-**Terminal Objective:** Gain a basic understanding of Object-Types, HTTP flows and how to create Native Objects in a flow.
+* Add a weather-alert native-object.
+* Create an event-processing flow to monitor temperature data, either from manual submissions (like in Project 1) or through simulated temperature data (from an inject node). The goal is to detect temperature readings that fall outside of a set range (e.g., below 0°C or above 35°C) and create an alert object
+* Create an event-processing agent using the new flow
+* Add a trigger to the existing weather-report native object to send the message (as an event) to the new agent POST-INSERT.
+
+**Terminal Objective:** Gain a basic understanding of how to create an event-to-flow agent that uses function nodes and switch nodes to process events, with the results being stored in additional native objects.
 
 **Enabling Objectives:**
 
-1. Learn how to create a Native Object Type (schema)
-2. Learn to use the HTTP-In node to serve a web form.
-3. Capture form input data and create a new Native Object record using the Native Object Create node.
-4. Use the HTTP-Response node to confirm successful submission.
+* Set up an inject node to simulate a weather-report event.
+* Use a function node to detect low-temperature or high-temperature events.
+* Add logic (switch node) to detect low/high temperature anomalies and create an alert native-object.
+* Testing using an inject node.
 
-**Skills:** FLOW-1, HTTP-1, HTTP-2, NO-1, NO-2, CORE-6
+**Skills:** FLOW-2, TRIGGER-1, CORE-1, CORE-3, CORE-5
 
 ### Detailed Steps
 
-#### **Part 1 — Create a New Object Type**
+This lessson begins where Lesson 2 left off. Ensure that you have compled lesson 2 and have the agent, flow, and object-type from that lesson in your tenant before continuing.
 
-1. Create a new object-type schema for a “weather-report” object with the following fields:
-   * ID (auto-generated UUID)
-   * Date-time (also auto-generated)
-   * Temperature (in C)
-   * Station ID (string), which reports which weather station submitted the report
+In this lesson we are going to send the weather reports received by the HTTP agent to an Event processing agent that will monitor for anomalous temperature readings, and when found, generate a "Weather Alert" record.
 
-NOTE: You can use the AI Assistant to create the schema by simply asking it to “create a weather report schema with auto generated ID and auto generated datetime properties as well as “temperature” and “station ID” properties to represent the reporting weather station”
+#### Part 1 — Create a New Object Type
 
-Here is the resulting schema from the AI assistant for this prompt:
+1. Create a new object-type called "weather-alert" as shown below:
 
 ```
 {
   "primaryKey": "id",
   "type": "object",
-  "$comment": "Schema representing a weather report",
+  "$comment": "Schema representing a weather alert type",
   "properties": {
     "id": {
       "type": "string",
@@ -48,105 +49,173 @@ Here is the resulting schema from the AI assistant for this prompt:
         "format": "short"
       }
     },
-    "datetime": {
+    "timestamp": {
       "type": "string",
       "generate": {
         "type": "datetime"
       },
-      "$comment": "The date and time when the weather report was generated"
+      "description": "The timestamp when the alert was created"
     },
-    "temperature": {
-      "type": "number",
-      "description": "Temperature recorded in degrees"
-    },
-    "stationId": {
+    "type": {
       "type": "string",
-      "$comment": "Identifier for the weather reporting station"
+      "enum": [
+        "HIGH_TEMP",
+        "LOW_TEMP",
+        "WIND",
+        "RAIN",
+        "SNOW"
+      ],
+      "description": "The type of weather alert"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Detailed description of the weather alert"
+    },
+    "report": {
+      "type": "object"
     }
   },
-  "$commentRequired": "Temperature and station ID are mandatory for instances of this Object Type",
+  "$commentRequired": "Optional, a list of mandatory properties for instances of this Object Type",
   "required": [
-    "temperature",
-    "stationId"
+    "type",
+    "description"
   ]
 }
 ```
 
-#### **Part 2 — Serving the HTML Form to a Browser**
+#### Part 2 — Create a New Flow
 
-Follow the steps below to create an HTTP endpoint that will respond to an HTTP GET and serve the HTML form that you created using SolutionAI.
+1. Create a new flow called "weather-monitor". Open the flow in the flow editor.
+2. Add an Inject node, a Prepare Event node, and an Event Start node to the canvas as shown below.
 
-1. Create a new ‘submit-weather-report’ flow and open the flow editor.
-2. Drag an “HTTP-IN” node onto the canvas and double-click the node to open the configuration editor.
-   * Set the Method to “GET”
-   * Set the URL to “/form”
-   * Give the node a name (e.g. “Serve Web Form”)
-   * Click “Done” to save your changes\\
-3. Use SolutionAI in the flow editor to create a web form for collecting the temperature report using the following prompt:
-   * “Create a web app with a form for submitting a weather report with only two fields: temperature and station Id (string). When the user pushes the submit button, the app should post to ‘/submit’ endpoint on the server.”
-   * Make sure the generated code submits a post-body that has temperature and stationId with the same names as what is in the native object schema that you created in Part 1.\\
-4. Use SolutionAI to add a “Template” node to the flow and populate it with the generated HTML/JS.
-5. Open the Template node and review the generated content:
-   * Give it a name if needed.
-   * Set the Syntax Highlight setting to “HTML”
-   * Confirm the template field contains the HTML/JS generated by SolutionAI
-   * Click “Done” to save your changes\\
-6. Wire the output of the HTTP-IN node to the input of the Template node\\
-7. Drag an “HTTP-RESPONSE” node onto the canvas and double-click the node to open the configuration editor.\\
-8. Give it a name (e.g. “OK”) and set the Status Code to 200\\
-9. Wire the output of the Template node to the HTTP-RESPONSE node.
+<figure><img src="/files/Qw1zQv9wXLNh65vDbgiG" alt=""><figcaption></figcaption></figure>
 
-#### **Part 3 — Accepting the Form Post (/submit)**
+4. Modify the Inject node, changing the msg.payload type to "JSON" and setting the JSON value to:
 
-1. Drag an “HTTP-IN” node onto the canvas and double-click the node to open the configuration editor.
-   * Set the Method to “POST”
-   * Set the URL to “/submit”
-   * Give the node a name (e.g. “Submit Web Form”)
-   * Click “Done” to save your changes\\
-2. Drag a Create Object node onto the canvas and double-click to open the configuration editor.
-   * Give it a name (e.g. “Create Weather Report”)
-   * Set the object-type to “weather-report” using the drop-down
-   * Click “Done” to save your changes\\
-3. Wire the output of the HTTP-IN node to the input of the Create Object node.\\
-4. Drag an “HTTP-RESPONSE” node onto the canvas and double-click the node to open the configuration editor.\\
-5. Give it a name (e.g. “OK”) and set the Status Code to 200\\
-6. Wire the output of the Create Object node to the HTTP-RESPONSE node.
+```
+{
+    "temperature": 25,
+    "stationId": "JEFF"
+}
+```
 
-#### **Part 4 — Save the Flow and Deploy it as an Agent**
+5. Give the Inject node a name as well: "TEST". Save the changes to the Inject node.
+6. Add a function node to the canvas and wire it in immediately after the Event Start node.
+7. Double-click the function node to open the editor.
+8. Add the following JavaScript code to the function node.
 
-Your flow should now look like this:
+```javascript
+// Payload will have temperature and stationId
 
-<figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXfMcX9AIuG9EwtRWeBtXYLkk5n_ISUeABye0zkrff4Pb9ASzrISk8DdGPYsPttgBDCccRn3_ywuYIHvpk9c5i03qMaKRlu0YOlh53der0NXgWAD_0J8AOTJJarsXINX-5yldpYqK3_OyyoZ94akUAos7EF5?key=gh5I9q1_d9hcQcqLnAAJ8Q" alt=""><figcaption></figcaption></figure>
+// monitor for temperatures above 38C and below 0. Generate
+// a weather alert if the temperature is outside of this range
 
-Now it’s time to save your flow and deploy it for testing.
+msg.alert = false;
 
-1. Click “SAVE” in the upper right corner of the flow editor. Navigate back to the Contextual Admin console.\\
-2. Go to Components/Agents and click “+” to create a new agent.\\
-3. Give the agent an “ID”, “Name”, and “Description.\
-   For example:
-   * ID: submit-weather-report
-   * Name: Submit Weather Report
-   * Description: HTTP Agent that allows a user to submit a weather report using a web-based form.
-4. Set the type to “HTTP to Flow”\\
-5. Select the “flow” using the dropdown, selecting the flow that you created in Step 2\\
-6. Select the latest image\\
-7. Select Agent Size (Instance Compute) of “Small”\\
-8. Push “Save Changes” to create and deploy your agent.\\
-9. Go to the “Operations” tab and wait for the status column to show “Running”
+if (msg.payload.hasOwnProperty("temperature")) {
 
-Your agent configuration should now look like this:\\
+    if (msg.payload.temperature <= 0) {
+        msg.alert = true;
+        msg.alertType = "LOW_TEMP";
+    } else if (msg.payload.temperature >= 38) {
+        msg.alert = true;
+        msg.alertType = "HIGH_TEMP";
+    }
+}
 
-<div data-full-width="true"><figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXc9l3BiPkxs-pa_2p_jXHMz10P-5RfUe7WcRwAyCFmtpGgNgHmOAT0ia7Hw3tBkfjfZnYrMJ0WxGjiHVw8PiBc0VCiDH99ZTVThxao8KnUuChrdtLThrJUulVQiq3j2X4v_YGSqjEm-bdNVm-mda30_T4fv?key=gh5I9q1_d9hcQcqLnAAJ8Q" alt=""><figcaption></figcaption></figure></div>
+// important: always return msg from a function node
+return msg;
+```
 
-<figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcmxlYgiULHrfSgnui31zdKpzemRedWHemlh64XJppKbL_tqHlwNIUuC8s1qHVF8wz4nHaGoNuVVCGhG2QmfMdnEGJnVnJWTlWdnHpS3UVRLnH6Bv5nFTcCOkOGQMiQTzlPATTZWxNU49MS5Fs-Moz05N4?key=gh5I9q1_d9hcQcqLnAAJ8Q" alt=""><figcaption></figcaption></figure>
+9. Give the function node a name: "Check Temperature"
+10. Click "Done" to save the changes to the function node.
+11. Your flow should now look like this:
 
-#### **Part 5 — Test Your Agent/Flow**
+<figure><img src="/files/U0w4oVdWSs4gWEu45ONr" alt=""><figcaption></figcaption></figure>
 
-1. Go back to the “Definition” tab and copy the Agent URL in the first field to the clipboard.\\
-2. Open a browser and paste the URL into the browser and then add “/form” onto the end (remember our first HTTP-IN node was configured to response to “/form”\\
-3. Hit enter and you should now see the HTML form for submitting a weather report!\\
-4. Fill in the form with dummy data (e.g. 25 and “STATION1”) and push submit\\
-5. Go back to the Admin Console and navigate to Records/Data\\
-6. Click “Weather Reports” (weather-reports) in the list of object types\\
-7. Since you have submitted one report using the web form, you should now see that report (and only that report) in the list of weather reports\\
-8. Congratulations! You’ve completed your first training project.
+12. Drag a Switch node onto the canvas and wire it right after the function node.
+13. Double-click the Switch node to open the configuration editor.
+14. Give the switch node a name: "Alert?"
+15. Modify the "Property" field to check for msg.alert
+16. Modify the condition below the property to "is true"
+17. Add another condition and set it to "otherwise"
+18. At the bottom of the window, change the dropdown from "checking all rules" to "stopping after first match".
+19. Your Switch node should now look like this:
+
+<figure><img src="/files/LSHZonpTqq8jmvXiFunQ" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="/files/XkYVhkLLq83f17NPpL33" alt=""><figcaption></figcaption></figure>
+
+20. Drag a new Function node onto the canvas and wire it to the "is true" output of the Switch node, like this:
+
+<figure><img src="/files/9Hzrw1Go4ewbwGvAliZ9" alt=""><figcaption></figcaption></figure>
+
+21. Open the function node and add the following JS. Give it a name: "Prep New Alert".
+
+```
+// build the alert record
+
+msg.newAlert = {
+    type: msg.alertType,
+    description: msg.alertDescription,
+    report: msg.payload
+}
+
+return msg;
+```
+
+22. Drag a new Create Object node onto the canvas and wire it after the "Prep New Alert" Function node.
+23. Configure it as shown below:
+
+<figure><img src="/files/3lLqKqu2wHG1rhqE76T9" alt=""><figcaption></figcaption></figure>
+
+23. Drag an Event End node onto the canvas and wire it after the Create Object node.
+24. Connect the "Otherwise" output of the Switch node to the Event End node also.
+25. Your flow should now appear as shown below.
+
+<figure><img src="/files/I5qS2NSiUw5D7CCsY5NI" alt=""><figcaption></figcaption></figure>
+
+26. Drag a Catch Node onto the canvas.
+27. Add log-tap node and wire it right after the Catch node. Name it "Error" and configure it for "Complete Msg Object" and log-level = Error.
+28. Add an Event Error node after the log-tap node.
+29. Your error handling should now look like this:
+
+<figure><img src="/files/01JUZcW73hJJq7NTM6va" alt=""><figcaption></figcaption></figure>
+
+30. Click Save to save your flow.
+
+#### Part 3 — Create the Agent to run your new Flow
+
+1. Create a new agent as shown below:
+
+<figure><img src="/files/1KiDq5kMv1ofmjU8uveA" alt=""><figcaption></figcaption></figure>
+
+NOTE: The agent type for this agent is "Event to Flow" and NOT "HTTP to Flow".
+
+2. Open the agent and wait for it to show "Running" in the Operations tab.
+3. Navigate to Components/Object Types and open the weather-report object type.
+4. Click on the "Triggers" tab and add a "Post-Insert" trigger using the "+" button.
+5. Select "SendToAgent"
+6. Give the trigger a name: "Send Weather Report"
+7. If needed, select "Weather Monitor" as the agent to send the event to. The trigger configuration should look like this:
+
+<figure><img src="/files/aQIUPtUr2Yo0tPiv5u27" alt=""><figcaption></figcaption></figure>
+
+8. Save the trigger by clicking on "Create Trigger".
+
+#### Part 4 — Testing Your New Agent
+
+1. Go back to the browser tab where you have the Submit Weather Report form. If you don't have it open any longer, go back to the "Submit Weather Report" agent and copy the agent URL and remember to append "/form" to the URL.
+2. Submit a weather report with a temperature within the range 0 < temperature < 38. For example: 25.
+3. Now submit a weather report with a temperature above the high temperature threshold. For example: 40.
+4. Now submit a weather report with a temperature below the log temperature threshold. For example, -5.
+5. Now navigate to Records/Data/Weather Reports in the console and verify that you see all of these new reports, as shown below.
+
+<figure><img src="/files/IZ0zKck85FexNcIKu2Gg" alt=""><figcaption></figcaption></figure>
+
+6. Now navigate to Records/Data/Weather Alerts in the console and verify that you see two weather alerts, for the HIGH\_TEMP alert and the LOW\_TEMP alert.
+
+<figure><img src="/files/zgp4oLwFz7rm4XOHVxOC" alt=""><figcaption></figcaption></figure>
+
+Congratulations! You have now completed Lesson 3 of the Basic Developer Training Course. You now have an understanding of how to create Event Processing agents as well as new function nodes such as Function and Switch.

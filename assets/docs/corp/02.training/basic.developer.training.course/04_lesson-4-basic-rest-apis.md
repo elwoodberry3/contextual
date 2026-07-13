@@ -1,152 +1,313 @@
-# Lesson 1: HTTP Agent Introduction
+# Lesson 4: Basic REST APIs
 
-Create a Web Form to Record Weather Data
-
-{% embed url="<https://www.loom.com/share/c23c9f3c4ed9446faa18815e7b30c5cc?sid=91ac4ffc-2977-4b93-a84d-86cf1ec0415b>" %}
+## Full Weather Reporting API
 
 ### Overview
 
-**Objective:** Set up a simple HTTP flow that serves a web form for inputting weather data (temperature, humidity, wind speed, etc.).
+In this lesson we build on the previous lessons and enhance our Weather Reporting System by adding a full RESTful API to our existing flow that allows the client application to Create (POST), Read (GET), Update (PUT/PATCH), and Delete (DELETE).
 
-**Description:** This project introduces basic HTTP flows and interaction with Native Objects by allowing users to manually input weather data into the system. The flow will store this data as Native Objects in your system.
+This is a common pattern in HTTP flows that provide a custom data access layer for a web or mobile application.
 
-**Terminal Objective:** Gain a basic understanding of Object-Types, HTTP flows and how to create Native Objects in a flow.
+#### Objective
+
+Learn about how to implement the various REST operations using a combination of HTTP-IN nodes and Object nodes.
+
+**Description**:
+
+* Enhance the incoming weather report to support additional fields including humidity, wind, wind direction, and UV index.
+* Update the web form to allow the submission of these additional properties
+* Add new endpoints to the flow to support a /weather-report API with GET, POST, PUT, PATCH, and DELETE.
+* Test the new web app with the new endpoints.
+
+**Terminal Objective:** Possess a solid understanding of how to create an HTTP-Flow that exposes BASIC REST API endpoints (GET, POST, PUT, PATCH, DELETE) and then uses the various Native Object nodes to implement those operations.
 
 **Enabling Objectives:**
 
-1. Learn how to create a Native Object Type (schema)
-2. Learn to use the HTTP-In node to serve a web form.
-3. Capture form input data and create a new Native Object record using the Native Object Create node.
-4. Use the HTTP-Response node to confirm successful submission.
+* Learn to use an HTTP-IN POST node combined with NO CREATE
+* Learn to use an HTTP-IN PUT node combined with NO PUT
+* Learn to use an HTTP-IN PATCH node combined with function node to build patch payload and NO PATCH
+* Learn to use an HTTP-IN GET node combined with NO GET
+* Learn to use an HTTP-IN DELETE node combined with NO DELETE
 
-**Skills:** FLOW-1, HTTP-1, HTTP-2, NO-1, NO-2, CORE-6
+**New Skills:** NO-3, NO-4, NO-5, NO-6
 
 ### Detailed Steps
 
-#### **Part 1 — Create a New Object Type**
+#### Add New Properties to Weather Report Object-Type
 
-1. Create a new object-type schema for a “weather-report” object with the following fields:
-   * ID (auto-generated UUID)
-   * Date-time (also auto-generated)
-   * Temperature (in C)
-   * Station ID (string), which reports which weather station submitted the report
+1. Edit the weather-report object type and add the following properties:
+   * Humidity
+   * Wind Speed
+   * Wind direction
+   * UV index
+2. Open the submit-weather-report flow and modify the HTML form using the following HTML.
 
-NOTE: You can use the AI Assistant to create the schema by simply asking it to “create a weather report schema with auto generated ID and auto generated datetime properties as well as “temperature” and “station ID” properties to represent the reporting weather station”
+```html
+<!DOCTYPE html>
+<html lang="en">
 
-Here is the resulting schema from the AI assistant for this prompt:
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Report</title>
+</head>
+
+<body>
+    <h1>Submit Weather Report</h1>
+    <form id="weatherForm">
+        <label for="temperature">Temperature (°C):</label>
+        <input type="number" id="temperature" name="temperature" required><br><br>
+
+        <label for="humidity">Humidity (%):</label>
+        <input type="number" id="humidity" name="humidity" required><br><br>
+
+        <label for="windSpeed">Wind Speed (m/s):</label>
+        <input type="number" id="windSpeed" name="windSpeed" required><br><br>
+
+        <label for="windDirection">Wind Direction (degrees):</label>
+        <input type="number" id="windDirection" name="windDirection" required><br><br>
+
+        <label for="UVIndex">UV Index:</label>
+        <input type="number" id="UVIndex" name="UVIndex" required><br><br>
+
+        <label for="stationId">Station ID:</label>
+        <input type="text" id="stationId" name="stationId" required><br><br>
+
+        <button type="submit" id="submitButton">CREATE</button>
+    </form>
+
+    <h2>Weather Report Details</h2>
+    <p id="weatherReportDetails"></p>
+
+    <script>
+        let currentId = null;
+
+        document.getElementById('weatherForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const humidity = parseFloat(document.getElementById('humidity').value);
+            const windSpeed = parseFloat(document.getElementById('windSpeed').value);
+            const windDirection = parseFloat(document.getElementById('windDirection').value);
+            const UVIndex = parseFloat(document.getElementById('UVIndex').value);
+            const stationId = document.getElementById('stationId').value;
+
+            const data = {
+                temperature,
+                humidity,
+                windSpeed,
+                windDirection,
+                UVIndex,
+                stationId
+            };
+
+            try {
+                const url = currentId ? `/weather-report/${currentId}` : '/weather-report';
+                const method = currentId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    currentId = result.id;
+
+                    // Change button to 'UPDATE' if an existing report is being updated
+                    document.getElementById('submitButton').textContent = 'UPDATE';
+
+                    document.getElementById('weatherReportDetails').innerHTML = `
+                        <strong>ID:</strong> ${result.id} <br>
+                        <strong>Temperature:</strong> ${result.temperature} °C <button onclick="updateField('temperature')">Update</button><br>
+                        <strong>Humidity:</strong> ${result.humidity} % <button onclick="updateField('humidity')">Update</button><br>
+                        <strong>Wind Speed:</strong> ${result.windSpeed} m/s <button onclick="updateField('windSpeed')">Update</button><br>
+                        <strong>Wind Direction:</strong> ${result.windDirection} ° <button onclick="updateField('windDirection')">Update</button><br>
+                        <strong>UV Index:</strong> ${result.UVIndex} <button onclick="updateField('UVIndex')">Update</button><br>
+                        <strong>Station ID:</strong> ${result.stationId} <button onclick="updateField('stationId')">Update</button><br><br>
+                        <button onclick="deleteRecord()">Delete</button>
+                    `;
+                } else {
+                    document.getElementById('weatherReportDetails').textContent = "Error submitting report.";
+                }
+            } catch (error) {
+                document.getElementById('weatherReportDetails').textContent = "Network error.";
+            }
+        });
+
+        function updateField(field) {
+            const newValue = prompt(`Enter new value for ${field}:`);
+            if (newValue !== null) {
+                const data = {};
+                data[field] = field === 'stationId' ? newValue : parseFloat(newValue);
+
+                fetch(`/weather-report/${currentId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to update field');
+                    }
+                }).then(result => {
+                    document.getElementById('weatherReportDetails').innerHTML = `
+                        <strong>ID:</strong> ${result.id} <br>
+                        <strong>Temperature:</strong> ${result.temperature} °C <button onclick="updateField('temperature')">Update</button><br>
+                        <strong>Humidity:</strong> ${result.humidity} % <button onclick="updateField('humidity')">Update</button><br>
+                        <strong>Wind Speed:</strong> ${result.windSpeed} m/s <button onclick="updateField('windSpeed')">Update</button><br>
+                        <strong>Wind Direction:</strong> ${result.windDirection} ° <button onclick="updateField('windDirection')">Update</button><br>
+                        <strong>UV Index:</strong> ${result.UVIndex} <button onclick="updateField('UVIndex')">Update</button><br>
+                        <strong>Station ID:</strong> ${result.stationId} <button onclick="updateField('stationId')">Update</button><br><br>
+                        <button onclick="deleteRecord()">Delete</button>
+                    `;
+                }).catch(error => {
+                    alert("Error updating field: " + error.message);
+                });
+            }
+        }
+
+        function deleteRecord() {
+            fetch(`/weather-report/${currentId}`, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById('weatherReportDetails').textContent = "Weather report deleted.";
+                    currentId = null;
+                    // Change button back to 'CREATE' after deletion
+                    document.getElementById('submitButton').textContent = 'CREATE';
+                } else {
+                    alert("Error deleting report.");
+                }
+            }).catch(error => {
+                alert("Network error.");
+            });
+        }
+    </script>
+</body>
+
+</html>
+```
+
+#### Add a Full REST API
+
+The steps above satify the need for a POST node to create a new record. Now let's add the additional nodes to provide for update and delete capabilities to give our flow a full REST API.
+
+1. First, add a HTTP-IN POST node with a path of /weather-report and wire it in parallel with your existing /submit node so that it does the same thing.
+2. Now add an HTTP-IN node with a verb=GET and a path=/weather-report/:reportId
+
+> > * Now add a function node with the following JS
 
 ```
-{
-  "primaryKey": "id",
-  "type": "object",
-  "$comment": "Schema representing a weather report",
-  "properties": {
-    "id": {
-      "type": "string",
-      "generate": {
-        "type": "uuid",
-        "format": "short"
-      }
-    },
-    "datetime": {
-      "type": "string",
-      "generate": {
-        "type": "datetime"
-      },
-      "$comment": "The date and time when the weather report was generated"
-    },
-    "temperature": {
-      "type": "number",
-      "description": "Temperature recorded in degrees"
-    },
-    "stationId": {
-      "type": "string",
-      "$comment": "Identifier for the weather reporting station"
-    }
-  },
-  "$commentRequired": "Temperature and station ID are mandatory for instances of this Object Type",
-  "required": [
-    "temperature",
-    "stationId"
-  ]
+// Get the reportId param from the path
+
+msg.reportId = msg.req.params["reportId"];
+
+return msg;
+```
+
+> > * Now add a GET Object node and configure it's type for "weather-report" and it's object id for msg.reportId
+
+3. Now add an HTTP-IN node with a verb=PUT and a path=/weather-report
+
+> > * Now add a function node with the following JS
+
+```javascript
+
+msg.reportId = msg.req.params["reportId"];
+
+if (!msg.payload.hasOwnProperty("id")) {
+    msg.payload.id = msg.reportId;
 }
+
+delete msg.payload._metaData;
+
+return msg;
 ```
 
-#### **Part 2 — Serving the HTML Form to a Browser**
+> > * Now add a PUT Object node and configure it's type for "weather-report" and it's object id for msg.reportId, and input as msg.payload
 
-Follow the steps below to create an HTTP endpoint that will respond to an HTTP GET and serve the HTML form that you created using SolutionAI.
+4. Now add an HTTP-IN node with a verb=PATCH and a path=/weather-report
 
-1. Create a new ‘submit-weather-report’ flow and open the flow editor.
-2. Drag an “HTTP-IN” node onto the canvas and double-click the node to open the configuration editor.
-   * Set the Method to “GET”
-   * Set the URL to “/form”
-   * Give the node a name (e.g. “Serve Web Form”)
-   * Click “Done” to save your changes\\
-3. Use SolutionAI in the flow editor to create a web form for collecting the temperature report using the following prompt:
-   * “Create a web app with a form for submitting a weather report with only two fields: temperature and station Id (string). When the user pushes the submit button, the app should post to ‘/submit’ endpoint on the server.”
-   * Make sure the generated code submits a post-body that has temperature and stationId with the same names as what is in the native object schema that you created in Part 1.\\
-4. Use SolutionAI to add a “Template” node to the flow and populate it with the generated HTML/JS.
-5. Open the Template node and review the generated content:
-   * Give it a name if needed.
-   * Set the Syntax Highlight setting to “HTML”
-   * Confirm the template field contains the HTML/JS generated by SolutionAI
-   * Click “Done” to save your changes\\
-6. Wire the output of the HTTP-IN node to the input of the Template node\\
-7. Drag an “HTTP-RESPONSE” node onto the canvas and double-click the node to open the configuration editor.\\
-8. Give it a name (e.g. “OK”) and set the Status Code to 200\\
-9. Wire the output of the Template node to the HTTP-RESPONSE node.
+> > * Now add a function node with the following JS
 
-#### **Part 3 — Accepting the Form Post (/submit)**
+```javascript
 
-1. Drag an “HTTP-IN” node onto the canvas and double-click the node to open the configuration editor.
-   * Set the Method to “POST”
-   * Set the URL to “/submit”
-   * Give the node a name (e.g. “Submit Web Form”)
-   * Click “Done” to save your changes\\
-2. Drag a Create Object node onto the canvas and double-click to open the configuration editor.
-   * Give it a name (e.g. “Create Weather Report”)
-   * Set the object-type to “weather-report” using the drop-down
-   * Click “Done” to save your changes\\
-3. Wire the output of the HTTP-IN node to the input of the Create Object node.\\
-4. Drag an “HTTP-RESPONSE” node onto the canvas and double-click the node to open the configuration editor.\\
-5. Give it a name (e.g. “OK”) and set the Status Code to 200\\
-6. Wire the output of the Create Object node to the HTTP-RESPONSE node.
+msg.reportId = msg.req.params["reportId"];
+msg.patchArray = [];
 
-#### **Part 4 — Save the Flow and Deploy it as an Agent**
+// Iterate over each property in the payload
+for (let key in msg.payload) {
+    if (!msg.payload.hasOwnProperty(key)) continue;
 
-Your flow should now look like this:
+    // Check if the key is an allowed property
+    switch (key) {
+        case "temperature":
+        case "humidity":
+        case "windSpeed":
+        case "windDirection":
+        case "UVIndex":
+            msg.patchArray.push({
+                op: "set",
+                path: "/" + key,
+                value: msg.payload[key]
+            });
+            break;
+        default:
+            throw new Error("Invalid property (" + key + ") specified.");
+    }
+}
 
-<figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXfMcX9AIuG9EwtRWeBtXYLkk5n_ISUeABye0zkrff4Pb9ASzrISk8DdGPYsPttgBDCccRn3_ywuYIHvpk9c5i03qMaKRlu0YOlh53der0NXgWAD_0J8AOTJJarsXINX-5yldpYqK3_OyyoZ94akUAos7EF5?key=gh5I9q1_d9hcQcqLnAAJ8Q" alt=""><figcaption></figcaption></figure>
+// Set the patchRequest if there are patches to apply
+msg.payload = msg.patchArray.length > 0 ? msg.patchArray : [];
 
-Now it’s time to save your flow and deploy it for testing.
+return msg;
 
-1. Click “SAVE” in the upper right corner of the flow editor. Navigate back to the Contextual Admin console.\\
-2. Go to Components/Agents and click “+” to create a new agent.\\
-3. Give the agent an “ID”, “Name”, and “Description.\
-   For example:
-   * ID: submit-weather-report
-   * Name: Submit Weather Report
-   * Description: HTTP Agent that allows a user to submit a weather report using a web-based form.
-4. Set the type to “HTTP to Flow”\\
-5. Select the “flow” using the dropdown, selecting the flow that you created in Step 2\\
-6. Select the latest image\\
-7. Select Agent Size (Instance Compute) of “Small”\\
-8. Push “Save Changes” to create and deploy your agent.\\
-9. Go to the “Operations” tab and wait for the status column to show “Running”
+```
 
-Your agent configuration should now look like this:\\
+> > * Now add a SWITCH node with two conditions:
+> >   * msg.payload: is not empty
+> >   * otherwise
+> > * Dont forget to select "stopping after first match" at the bottom of the node configuration.
+> > * Now add a PATCH Object node and configure it's type for "weather-report" and it's object id for msg.reportId, and input as msg.payload
 
-<div data-full-width="true"><figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXc9l3BiPkxs-pa_2p_jXHMz10P-5RfUe7WcRwAyCFmtpGgNgHmOAT0ia7Hw3tBkfjfZnYrMJ0WxGjiHVw8PiBc0VCiDH99ZTVThxao8KnUuChrdtLThrJUulVQiq3j2X4v_YGSqjEm-bdNVm-mda30_T4fv?key=gh5I9q1_d9hcQcqLnAAJ8Q" alt=""><figcaption></figcaption></figure></div>
+5. Your complete flow should now look like this:
 
-<figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcmxlYgiULHrfSgnui31zdKpzemRedWHemlh64XJppKbL_tqHlwNIUuC8s1qHVF8wz4nHaGoNuVVCGhG2QmfMdnEGJnVnJWTlWdnHpS3UVRLnH6Bv5nFTcCOkOGQMiQTzlPATTZWxNU49MS5Fs-Moz05N4?key=gh5I9q1_d9hcQcqLnAAJ8Q" alt=""><figcaption></figcaption></figure>
+<figure><img src="/files/C2LcXOJ7ayYY8oQSSZ0a" alt=""><figcaption></figcaption></figure>
 
-#### **Part 5 — Test Your Agent/Flow**
+6. Push SAVE to save the changes and then restart the agent.
 
-1. Go back to the “Definition” tab and copy the Agent URL in the first field to the clipboard.\\
-2. Open a browser and paste the URL into the browser and then add “/form” onto the end (remember our first HTTP-IN node was configured to response to “/form”\\
-3. Hit enter and you should now see the HTML form for submitting a weather report!\\
-4. Fill in the form with dummy data (e.g. 25 and “STATION1”) and push submit\\
-5. Go back to the Admin Console and navigate to Records/Data\\
-6. Click “Weather Reports” (weather-reports) in the list of object types\\
-7. Since you have submitted one report using the web form, you should now see that report (and only that report) in the list of weather reports\\
-8. Congratulations! You’ve completed your first training project.
+#### Testing in the Revised Web App
+
+#### Create Weather Summary Object-Type
+
+1. Now create a new object type and call it "weather-summary". This will be the object type that is used to store hourly weather summaries.
+2. Give it the following properties:
+   * date
+   * hour
+   * avgTemperature
+   * minTemperature
+   * maxTemperature
+   * avgHumidity
+   * minHumidity
+   * maxHumidity
+   * avgWindSpeed
+   * minWindSpeed
+   * maxWindSpeed
+   * reports
+3. Make sure it has an auto-generated 'id' field as the primary key
+4. Save the new object type
+
+#### Create a New Weather Summarization Flow
+
+This new flow will receive the incoming weather report using a trigger. It will then GET the existing weather summary for the current hour (if there is one). Using the report and the existing summary, it will calculate the updated values for the report and then PATCH the report with the modified values. It will also add the report to the reports array on the summary record.
+
+1. Create a new flow called "weather-summarization"
+2. Add the Inject, Prepare Event, and Start Event nodes
+3. Add a
