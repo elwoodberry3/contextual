@@ -2,10 +2,10 @@
 # Corporate Documentation  
 
 ## Getting Started 
-1. [Welcome](#)
+1. [Welcome](../../docs/corp/01.getting.started/01.welcome.md)
 
 ## Training
-1. [Basic Developer Training Course](#)
+1. [Basic Developer Training Course](../corp/02.training/basic.developer.training.course/)
 
 ## Components & Data
 1. [Object Types](/contextual/assets/docs/corp/03.components.data/01.object.types) 
