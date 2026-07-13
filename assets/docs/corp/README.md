@@ -1,4 +1,4 @@
-![Hero](/contextual/assets/imgs/hero.jpg)  
+![Hero](../../imgs/hero.jpg)  
 # Corporate Documentation
 [Components & Data](#) > [Flows](#) > [Flow Editor](#)
 
