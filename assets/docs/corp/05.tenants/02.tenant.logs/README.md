@@ -1,2 +1,4 @@
 ![Hero](../../../../imgs/pg-header.jpg)
-# Tenants
+# Tenant Logs
+
+Within your Tenant Workspace, you have access to Logs that include Session and Message activity from all of your Agents in one location.
