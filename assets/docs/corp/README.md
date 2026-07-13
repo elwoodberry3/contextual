@@ -8,8 +8,8 @@
 1. [Basic Developer Training Course](../corp/02.training/basic.developer.training.course/)
 
 ## Components & Data  
-1. [Object Types](/contextual/assets/docs/corp/03.components.data/01.object.types)
-   1. [Data In Contextual](/contextual/assets/docs/corp/03.components.data/01.object.types/01.data.in.contextual)
+1. [Object Types](/contextual/assets/docs/corp/03.components.data)
+   1. [Data In Contextual](/contextual/assets/docs/corp/03.components.data/01.object.types)
       1. [Secrets](/contextual/assets/docs/corp/03.components.data/01.object.types/01.data.in.contextual/01.secrets.md)
       2. [Validation](/contextual/assets/docs/corp/03.components.data/01.object.types/01.data.in.contextual/02.validation.md)
       3. [Versioning](/contextual/assets/docs/corp/03.components.data/01.object.types/01.data.in.contextual/03.versioning.md)
