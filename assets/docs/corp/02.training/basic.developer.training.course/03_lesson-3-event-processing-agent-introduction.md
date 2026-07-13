@@ -1,3 +1,4 @@
+![Hero](../../../../imgs/pg-header.jpg)
 # Lesson 3: Event Processing Agent Introduction
 
 ## Temperature Event Monitoring Agent

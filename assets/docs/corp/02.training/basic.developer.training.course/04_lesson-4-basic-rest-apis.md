@@ -1,3 +1,4 @@
+![Hero](../../../../imgs/pg-header.jpg)
 # Lesson 4: Basic REST APIs
 
 ## Full Weather Reporting API

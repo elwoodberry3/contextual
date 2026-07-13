@@ -1,3 +1,4 @@
+![Hero](../../../../imgs/pg-header.jpg)
 # Lesson 2: Logging and Error Handling Basics
 
 ## Logging Basics for Weather Monitoring with Logtap and CATCH Nodes

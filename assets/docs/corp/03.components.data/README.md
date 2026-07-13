@@ -1,2 +1,2 @@
-![Hero](../../../imgs/hero.jpg)  
+![Hero](../../../imgs/pg-header.jpg)  
 # Component Data  

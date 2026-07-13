@@ -1,3 +1,4 @@
+![Hero](../../../../imgs/pg-header.jpg)
 # Lesson 5: Object Search and Update
 
 ## Hourly Weather Summaries

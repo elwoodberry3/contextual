@@ -1,3 +1,4 @@
+![Hero](../../../../imgs/pg-header.jpg)
 # Lesson 1: HTTP Agent Introduction  
 [Training](../../02.training/) > [Basic Training](../../02.training/basic.developer.training.course/)  
 
