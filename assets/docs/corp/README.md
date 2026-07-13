@@ -1,13 +1,9 @@
 ![Hero](../../imgs/pg-header.jpg)  
 # Corporate Documentation  
 
-## [Getting Started](../corp/01.getting.started/README.md)
-1. [Welcome](../../docs/corp/01.getting.started/01.welcome.md)
-
-## [Training](../../../../contextual/assets/docs/corp/02.training/)
-1. [Basic Developer Training Course](../corp/02.training/basic.developer.training.course/)
-
-## [Components & Data](../../../../contextual/assets/docs/corp/03.components.data/) 
+## [Getting Started](./01.getting.started/README.md)
+## Training / [Basic Developer Training Course](./02.training/basic.developer.training.course/)
+## [Components & Data](./03.components.data/README.md) 
 1. [Object Types](../corp/03.components.data)
    1. [Data In Contextual](../corp/03.components.data/01.object.types)
       1. [Secrets](../corp/03.components.data/01.object.types/01.data.in.contextual/01.secrets.md)
