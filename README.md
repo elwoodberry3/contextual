@@ -1,3 +1,5 @@
 ![Hero](./assets/imgs/hero.jpg)
-# contextual
-This is my demo project
+# Demo Project For Contextual.io Leadership  
+[Documentation](../contextual/assets/docs/corp/README.md) ↗️
+
+In this demo I demonstrate. . .
