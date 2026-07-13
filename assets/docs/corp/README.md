@@ -20,7 +20,16 @@
 6. [JWKS Profiles](#)
 
 ## Patterns
-1. [](#)
+1. [Solution Architecture](#)  
+1. [Working With Data](#)  
+1. [Industry Cookbooks](#)  
 
 ## Tenants
-1. [](#)
+1. [Tenant Workspace](#)  
+1. [Tenant Logs](#)  
+   1. [Contextual Log Query Language (CLQL)](#)
+      1. [String Searches](#)
+      2. [Keyword Searches](#)
+      3. [Advanced Operators](#)
+1. [Monitoring](#)  
+1. [Tenant API](#)  
