@@ -1,8 +1,8 @@
-# Lesson 1: HTTP Agent Introduction
+# Lesson 1: HTTP Agent Introduction  
+[Training](../../02.training/) > [Basic Training](../../02.training/basic.developer.training.course/)  
 
-Create a Web Form to Record Weather Data
-
-{% embed url="<https://www.loom.com/share/c23c9f3c4ed9446faa18815e7b30c5cc?sid=91ac4ffc-2977-4b93-a84d-86cf1ec0415b>" %}
+Create a Web Form to Record Weather Data  
+% embed url="<https://www.loom.com/share/c23c9f3c4ed9446faa18815e7b30c5cc?sid=91ac4ffc-2977-4b93-a84d-86cf1ec0415b>" %
 
 ### Overview
 
