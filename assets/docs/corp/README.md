@@ -9,7 +9,7 @@
 
 ## Components & Data  
 1. [Object Types](/contextual/assets/docs/corp/03.components.data/01.object.types)
-   1. [Data In Contextual](/contextual/assets/docs/corp/03.components.data/01.object.types/01.data.in.contextual/00.data-in-contextual.md)
+   1. [Data In Contextual](/contextual/assets/docs/corp/03.components.data/01.object.types/00.data-in-contextual.md)
       1. [Secrets](/contextual/assets/docs/corp/03.components.data/01.object.types/01.data.in.contextual/01.secrets.md)
       2. [Validation](/contextual/assets/docs/corp/03.components.data/01.object.types/01.data.in.contextual/02.validation.md)
       3. [Versioning](/contextual/assets/docs/corp/03.components.data/01.object.types/01.data.in.contextual/03.versioning.md)
