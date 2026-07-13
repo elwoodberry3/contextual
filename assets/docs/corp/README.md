@@ -1,6 +1,5 @@
 ![Hero](../../imgs/hero.jpg)  
-# Corporate Documentation
-[Components & Data](#) > [Flows](#) > [Flow Editor](#)
+# Corporate Documentation  
 
 ## Getting Started 
 1. [Welcome](#)
