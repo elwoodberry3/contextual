@@ -1,4 +1,4 @@
-![Hero](./assets/imgs/hero.jpg)  
+![Hero](../../../../imgs/hero.jpg)  
 # Basic Developer Training Course
 
 {% content-ref url="/pages/peHZ6YOk1dkuwn4FhiwW" %}
