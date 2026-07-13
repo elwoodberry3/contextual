@@ -1,13 +1,13 @@
-![Hero](../../imgs/hero.jpg)  
+![Hero](../../imgs/pg-header.jpg)  
 # Corporate Documentation  
 
-## Getting Started 
+## [Getting Started](../../../../contextual/assets/docs/corp/01.getting.started/)
 1. [Welcome](../../docs/corp/01.getting.started/01.welcome.md)
 
-## Training
+## [Training](../../../../contextual/assets/docs/corp/02.training/)
 1. [Basic Developer Training Course](../corp/02.training/basic.developer.training.course/)
 
-## Components & Data  
+## [Components & Data](../../../../contextual/assets/docs/corp/03.components.data/) 
 1. [Object Types](../corp/03.components.data)
    1. [Data In Contextual](../corp/03.components.data/01.object.types)
       1. [Secrets](../corp/03.components.data/01.object.types/01.data.in.contextual/01.secrets.md)
@@ -19,12 +19,12 @@
 1. [AI Routes](#)
 6. [JWKS Profiles](#)
 
-## Patterns
+## [Patterns](../../../../contextual/assets/docs/corp/04.patterns/) 
 1. [Solution Architecture](#)  
 1. [Working With Data](#)  
 1. [Industry Cookbooks](#)  
 
-## Tenants
+## [Tenants](../../../../contextual/assets/docs/corp/05.tenants/) 
 1. [Tenant Workspace](#)  
 1. [Tenant Logs](#)  
    1. [Contextual Log Query Language (CLQL)](#)
