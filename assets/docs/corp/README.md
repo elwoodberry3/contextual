@@ -21,13 +21,13 @@
 1. [AI Routes](#)
 6. [JWKS Profiles](#)
 
-## [Patterns](../../../../contextual/assets/docs/corp/04.patterns/) 
-1. [Solution Architecture](#)  
+## [Patterns](./04.patterns/README.md) 
+1. [Solution Architecture](./04.patterns/solution-architecture/README.md)  
+   1. [Events, Messages, Queues](./04.patterns/solution-architecture/01.events-messages-queues.md)
 1. [Working With Data](#)  
 1. [Industry Cookbooks](#)  
 
-## [Tenants](../../../../contextual/assets/docs/corp/05.tenants/) 
-1. [Tenant Workspace](#)  
+## [Tenants](./05.tenants/README.md)  
 1. [Tenant Logs](#)  
    1. [Contextual Log Query Language (CLQL)](#)
       1. [String Searches](#)
