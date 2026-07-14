@@ -1,79 +1,17 @@
-# Node Reference
+# Using Agents in Flows
 
-- [AI Gateway](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/ai-gateway.md)
-- [AI Generate](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/ai-gateway/ai-generate.md)
-- [AI Tool](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/ai-gateway/ai-tool.md)
-- [AI Tool Response](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/ai-gateway/ai-tool-response.md)
-- [Common](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common.md)
-- [Log Tap](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/log-tap.md)
-- [Inject](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/inject.md)
-- [Debug](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/debug.md)
-- [Complete](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/complete.md)
-- [Catch](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/catch.md)
-- [Status](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/status.md)
-- [Link In](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/link-in.md)
-- [Link Call](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/link-call.md)
-- [Link Out](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/link-out.md)
-- [Comment](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/common/comment.md)
-- [Event](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/event.md)
-- [Prepare Event](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/event/prepare-event.md)
-- [Event Start](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/event/event-start.md)
-- [Event End](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/event/event-end.md)
-- [Event Error](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/event/event-error.md)
-- [Records & Attachments](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object.md): Nodes for creating, reading, updating, deleting, and searching Object Type records, and managing file attachments on individual records.
-- [Search Object](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/search-object-type.md)
-- [Query Object](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/query-object.md)
-- [Get Object](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/get-object.md)
-- [Create Object](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/create-object.md)
-- [Patch Object](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/patch-object.md)
-- [Put Object](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/put-object.md)
-- [Delete Object](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/delete-object.md)
-- [Run Action](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/run-action.md)
-- [Upload Attachment](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/upload-attachment.md)
-- [Read Attachment](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/read-attachment.md)
-- [Search Attachments](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/search-attachments.md)
-- [Delete Attachment](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/object/delete-attachment.md)
-- [Request](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request.md)
-- [Send to Agent](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request/send-to-agent.md)
-- [HTTP GET](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request/http-get.md)
-- [HTTP PATCH](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request/http-patch.md)
-- [HTTP PUT](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request/http-put.md)
-- [HTTP DELETE](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request/http-delete.md)
-- [HTTP POST](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request/http-post.md)
-- [GQL](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request/gql.md)
-- [Produce Message](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/request/produce-message.md)
-- [Function](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function.md)
-- [Function](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/function.md)
-- [Switch](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/switch.md)
-- [Change](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/change.md)
-- [Range](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/range.md)
-- [Template](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/template.md)
-- [Delay](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/delay.md)
-- [Trigger](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/trigger.md)
-- [Exec](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/exec.md)
-- [Filter](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/filter.md)
-- [Loop](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/function/loop.md)
-- [Network](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network.md)
-- [MQTT In](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/mqtt-in.md)
-- [MQTT Out](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/mqtt-out.md)
-- [HTTP In](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/http-in.md)
-- [HTTP Response](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/http-response.md)
-- [HTTP Request](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/http-request.md)
-- [WebSocket In](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/websocket-in.md)
-- [WebSocket Out](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/websocket-out.md)
-- [TCP In](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/tcp-in.md)
-- [TCP Out](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/tcp-out.md)
-- [TCP Request](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/tcp-request.md)
-- [UDP In](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/udp-in.md)
-- [UDP Out](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/network/udp-out.md)
-- [Sequence](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/sequence.md)
-- [Split](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/sequence/split.md)
-- [Join](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/sequence/join.md)
-- [Sort](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/sequence/sort.md)
-- [Batch](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/sequence/batch.md)
-- [Parser](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/parser.md)
-- [csv](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/parser/csv.md)
-- [html](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/parser/html.md)
-- [json](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/parser/json.md)
-- [xml](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/parser/xml.md)
-- [yaml](https://docs.contextual.io/documentation-and-resources/components-and-data/flows/node-reference/parser/yaml.md)
+While agents are the container for the execution of a flow, a flow can also send messages/events to another agent for processing.
+
+This is done by using the "Send To Agent" node in a flow.
+
+<figure><img src="/files/T7JsnWuZQUGw69X0nUBK" alt="" width="176"><figcaption></figcaption></figure>
+
+The send to agent node can be found in the "request" category in the palette in the flow editor.
+
+Using this node allows a flow to effectively route messages to different agents based on data type as shown in the flow below.
+
+<figure><img src="/files/mFP6ha6BJnwAwU1XAVxX" alt=""><figcaption></figcaption></figure>
+
+The Send To Agent node is very easy to use. Simply select the agent from the list "Agent Id" property and provide the optional key and required payload properties.
+
+<figure><img src="/files/OEtHI80QPANe8myWG0CA" alt=""><figcaption></figcaption></figure>
