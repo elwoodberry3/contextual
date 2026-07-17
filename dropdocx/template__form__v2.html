@@ -1,0 +1,77 @@
+<!--
+Contract Attributes
+Binds Path A to Path B and to the Object Type schema
+
+1. method="POST" action="/submit" — must match Path B's HTTP In exactly.
+2. enctype="multipart/form-data" — without this, the file never leaves the browser; you'd receive only the filename string. This single attribute is the difference between satisfying CR-03 and failing it.
+3. Field names submitterName, submitterEmail, note — matching the schema field names 1:1 means the Path B reshape (Set msg.payload) stays trivial and traceable.
+4. The file input name (document) — whatever you choose here is the name you'll look for when you run the [VERIFY] inspection on Path B's message shape. Pick it now, keep it stable.
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DropDocx Intake</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-100 flex items-center justify-center p-6">
+  <main class="w-full max-w-md">
+
+    <!-- Logo -->
+    <div class="flex justify-center mb-6">
+      <img
+        src="https://raw.githubusercontent.com/elwoodberry3/contextual/main/assets/imgs/dropdocx_logo.svg"
+        alt="DropDocx — powered by Contextual.io"
+        class="h-16 w-auto">
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-lg p-8">
+      <h1 class="text-xl font-semibold text-slate-800 mb-1">Submit a Request</h1>
+      <p class="text-sm text-slate-500 mb-6">Add a note and attach your document. We handle the rest.</p>
+
+      <form method="POST" action="/submit" enctype="multipart/form-data" class="space-y-5">
+
+        <div>
+          <label for="submitterName" class="block text-sm font-medium text-slate-700 mb-1">Name</label>
+          <input type="text" id="submitterName" name="submitterName" required
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label for="submitterEmail" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          <input type="email" id="submitterEmail" name="submitterEmail" required
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label for="note" class="block text-sm font-medium text-slate-700 mb-1">Note</label>
+          <textarea id="note" name="note" rows="4" required
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        </div>
+
+        <div>
+          <label for="document" class="block text-sm font-medium text-slate-700 mb-1">Document</label>
+          <input type="file" id="document" name="document" required
+            class="w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-indigo-700 hover:file:bg-indigo-100">
+        </div>
+
+        <button type="submit"
+          class="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+          Submit
+        </button>
+
+      </form>
+    </div>
+
+    <p class="mt-4 text-center text-xs text-slate-400">
+      DropDocx &mdash; powered by Contextual.io
+    </p>
+
+  </main>
+
+</body>
+</html>
