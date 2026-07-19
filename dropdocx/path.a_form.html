@@ -9,6 +9,12 @@ Binds Path A to Path B and to the Object Type schema
 
 -->
 
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +39,7 @@ Binds Path A to Path B and to the Object Type schema
       <h1 class="text-xl font-semibold text-slate-800 mb-1">Submit a Request</h1>
       <p class="text-sm text-slate-500 mb-6">Add a note and attach your document. We handle the rest.</p>
 
-      <form method="POST" action="/submit" enctype="multipart/form-data" class="space-y-5">
+      <form id="dropdocxForm" method="POST" action="/submit" enctype="multipart/form-data" class="space-y-5">
 
         <div>
           <label for="submitterName" class="block text-sm font-medium text-slate-700 mb-1">Name</label>
@@ -59,10 +65,9 @@ Binds Path A to Path B and to the Object Type schema
             class="w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-indigo-700 hover:file:bg-indigo-100">
         </div>
 
-        <button type="submit"
-          class="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-          Submit
-        </button>
+        <button type="submit" id="submitBtn" class="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50">Submit</button>
+        
+        <p id="responseMessage" class="hidden text-sm rounded-lg px-4 py-3"></p>
 
       </form>
     </div>
@@ -72,6 +77,51 @@ Binds Path A to Path B and to the Object Type schema
     </p>
 
   </main>
+
+<script>
+    const form = document.getElementById('dropdocxForm');
+    const msgEl = document.getElementById('responseMessage');
+    const btn = document.getElementById('submitBtn');
+
+    function showMessage(text, ok) {
+      msgEl.textContent = text;
+      msgEl.className = 'text-sm rounded-lg px-4 py-3 ' + (ok
+        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+        : 'bg-rose-50 text-rose-700 border border-rose-200');
+    }
+
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      btn.disabled = true;
+      showMessage('Submitting…', true);
+
+      try {
+        const response = await fetch('/submit', {
+          method: 'POST',
+          body: new FormData(form)
+          // NO Content-Type header — the browser sets the multipart boundary
+        });
+
+        let result = {};
+        try { result = await response.json(); } catch (e) { /* non-JSON body */ }
+
+        if (response.ok) {
+          showMessage(
+            'Received. Record ID: ' + (result.recordId || 'unavailable'),
+            true
+          );
+          form.reset();
+        } else {
+          showMessage(result.message || ('Submission failed (' + response.status + ')'), false);
+        }
+      } catch (error) {
+        showMessage('Network error — please try again.', false);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+
 
 </body>
 </html>

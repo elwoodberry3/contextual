@@ -1,0 +1,72 @@
+{
+  "primaryKey": "id",
+  "type": "object",
+  "description": "Stores user-submitted intake requests, including the original note and later AI enrichment outputs.",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the intake request.",
+      "generate": {
+        "type": "uuid",
+        "format": "v4"
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the intake request record was created.",
+      "generate": {
+        "type": "date-time"
+      }
+    },
+    "submitterName": {
+      "type": "string",
+      "description": "Name of the person who submitted the request.",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "submitterEmail": {
+      "type": "string",
+      "description": "Email address of the person who submitted the request.",
+      "format": "email"
+    },
+    "note": {
+      "type": "string",
+      "description": "The user-submitted note describing the request.",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "description": "Processing lifecycle state.",
+      "enum": [
+        "RECEIVED",
+        "AI_PROCESSED",
+        "AI_FAILED"
+      ]
+    },
+    "aiSummary": {
+      "type": "string",
+      "description": "AI-generated summary of the note. Written by the system, never by the submitter."
+    },
+    "aiCategory": {
+      "type": "string",
+      "description": "AI-assigned category."
+    },
+    "aiConfidence": {
+      "type": "number",
+      "description": "AI self-reported confidence score.",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "aiProcessedAt": {
+      "type": "string",
+      "description": "Timestamp when AI enrichment completed."
+    }
+  },
+  "required": [
+    "submitterName",
+    "submitterEmail",
+    "note",
+    "status"
+  ]
+}

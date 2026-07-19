@@ -1,0 +1,10 @@
+{
+    "submitterName": "This name is deliberately far longer than one hundred characters so that it violates the maxLength constraint on the schema",
+    "submitterEmail": "test@dropdocx.demo",
+    "note": "Catch node verification fixture — expected outcome is a schema rejection at Create Intake Request.",
+    "document": { 
+        "filename": "fixture.pdf", 
+        "mimetype": "application/pdf", 
+        "size": 1024 
+    }
+}
