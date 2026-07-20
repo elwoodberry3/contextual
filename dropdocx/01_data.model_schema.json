@@ -12,13 +12,6 @@
         "format": "v4"
       }
     },
-    "createdAt": {
-      "type": "string",
-      "description": "Timestamp when the intake request record was created.",
-      "generate": {
-        "type": "date-time"
-      }
-    },
     "submitterName": {
       "type": "string",
       "description": "Name of the person who submitted the request.",
