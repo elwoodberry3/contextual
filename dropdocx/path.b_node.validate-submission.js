@@ -1,6 +1,6 @@
 /**
  * DropDocx Form Validation
- * Version: 2.0
+ * Version: 2.1
  * Developer: Elwood Berry (elwood.berry@contextual.io)
  *
  * Outputs:
@@ -10,56 +10,34 @@
  * Design notes:
  *   - submitterName maxLength is DELIBERATELY not enforced here. The schema
  *     (maxLength: 100) is the enforcement layer under test for the Catch/500
- *     path (Lesson 2 pattern: function = client-error gate, schema = last
- *     line of defense). Enforce here too before production.
- *   - VERIFY-1 (file location after multipart POST) is unresolved. This
- *     function probes candidate paths and records which one matched in
- *     msg.validation.fileSource, so the first live POST resolves VERIFY-1
- *     via the existing log-taps. Candidates are Node-RED conventions,
- *     NOT confirmed Contextual behavior — prune once observed.
+ *     path (function = client-error gate, schema = last line of defense).
+ *     Enforce here too before production.
+ *   - VERIFY-1 RESOLVED (session kdgCfSMLKYzribPKgUSpd1, 2026-07-20):
+ *     form fields → msg.req.body (mirrored to msg.payload),
+ *     file → msg.req.files[0] (array; fieldname "document").
+ *     Probe pruned to: fixture stub, then observed live path.
  */
 
-// ─────────────────────────────────────────────────────────────
-// 1. Form fields  (VERIFY-1: confirm msg.payload on live POST)
-// ─────────────────────────────────────────────────────────────
+// ── 1. Form fields (observed: msg.payload mirrors msg.req.body) ──
 const p = msg.payload || {};
 
-const name  = (p.submitterName  || '').trim();
+const name = (p.submitterName || '').trim();
 const email = (p.submitterEmail || '').trim();
-const note  = (p.note           || '').trim();
+const note = (p.note || '').trim();
 
-// ─────────────────────────────────────────────────────────────
-// 2. File discovery — probe candidates in priority order.
-//    Each candidate is tagged so logs show where the file landed.
-// ─────────────────────────────────────────────────────────────
-const candidates = [
-    // Inject fixtures: metadata stub travels with the JSON payload
-    { source: 'payload.document (stub/fixture)', value: p.document },
-    // CANDIDATE (inferred, Node-RED/multer convention): parsed upload array
-    { source: 'req.files[0]',
-      value: msg.req && Array.isArray(msg.req.files) ? msg.req.files[0] : undefined },
-    // CANDIDATE (inferred): keyed by form field name "document"
-    { source: 'req.files.document',
-      value: msg.req && msg.req.files && !Array.isArray(msg.req.files)
-             ? msg.req.files.document : undefined }
-];
+// ── 2. File location — fixture stub first, then observed live path ──
+const isFixture = !!p.document;
+const file = p.document
+    || (msg.req && Array.isArray(msg.req.files) ? msg.req.files[0] : null);
 
-const hit  = candidates.find(c => c.value != null);
-const file = hit ? hit.value : null;
-
-// Normalize metadata defensively — property names vary by parser.
-// NEVER copy buffer/binary content into these fields.
 const fileMeta = file ? {
-    filename: file.originalname || file.filename || file.name || '(unknown)',
-    mimetype: file.mimetype     || file.type     || '(unknown)',
-    size:     (typeof file.size === 'number') ? file.size : null,
-    source:   hit.source
+    filename: file.originalname || file.filename || '(unknown)',
+    mimetype: file.mimetype || '(unknown)',
+    size: (typeof file.size === 'number') ? file.size : null,
+    source: isFixture ? 'payload.document (fixture)' : 'req.files[0] (live)'
 } : null;
 
-// ─────────────────────────────────────────────────────────────
-// 3. File policy (applied only when metadata is present —
-//    unknown shapes fail open here, schema/upload fail closed)
-// ─────────────────────────────────────────────────────────────
+// ── 3. File policy ──
 const ALLOWED_TYPES = [
     'application/pdf',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -67,19 +45,19 @@ const ALLOWED_TYPES = [
 ];
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
-// ─────────────────────────────────────────────────────────────
-// 4. Validation
-// ─────────────────────────────────────────────────────────────
+// ── 4. Validation ──
 const errors = [];
 
-if (!name)  errors.push('submitterName is required');
+if (!name) errors.push('submitterName is required');
 if (!email) errors.push('submitterEmail is required');
 else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('submitterEmail is invalid');
-if (!note)  errors.push('note is required');
+if (!note) errors.push('note is required');
 
 if (!file) {
     errors.push('document file is required');
 } else {
+    // Live path always carries mimetype (observed); '(unknown)' can only
+    // occur on fixture stubs, which fail open here by design.
     if (fileMeta.mimetype !== '(unknown)' && !ALLOWED_TYPES.includes(fileMeta.mimetype)) {
         errors.push('unsupported file type: ' + fileMeta.mimetype);
     }
@@ -88,29 +66,26 @@ if (!file) {
     }
 }
 
-// ─────────────────────────────────────────────────────────────
-// 5. Route
-// ─────────────────────────────────────────────────────────────
+// ── 5. Route ──
 if (errors.length) {
-    msg.validation = {
-        valid: false,
-        errors: errors,
+    msg.validation = { valid: false, errors, fileSource: fileMeta ? fileMeta.source : 'none' };
+    msg.logline = {                       // ← point LOG — Validation Failed at msg.logline ONLY
+        stage: 'validation-failed',
+        errors,
+        filename: fileMeta ? fileMeta.filename : null,
         fileSource: fileMeta ? fileMeta.source : 'none'
     };
-    msg.payload = { success: false, message: errors.join('; ') }; // 400 JSON body
-    return [null, msg];                                            // → output 2
+    msg.payload = { success: false, message: errors.join('; ') };
+    return [null, msg];
 }
 
-msg.validation = {
-    valid: true,
-    fileSource: fileMeta.source   // ← resolves VERIFY-1 in the logs
-};
+msg.validation = { valid: true, fileSource: fileMeta.source };
 msg.input = {
     form: { submitterName: name, submitterEmail: email, note: note },
     file: {
         meta: fileMeta,   // safe to log
-        ref:  file        // raw file object for Upload Attachments (VERIFY-2)
-                          // — NEVER point a log-tap at msg.input.file.ref
+        ref: file        // consumed by Upload Attachments (VERIFY-2 closed by live run)
+        // — NEVER point a log-tap at msg.input.file.ref
     }
 };
-return [msg, null];                                                // → output 1
+return [msg, null];
